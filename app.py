@@ -10,27 +10,31 @@ st.set_page_config(page_title="AdSmart AI: CTR Predictor", page_icon="📈")
 # --- LOAD ASSETS ---
 @st.cache_resource
 def load_assets():
-    # 1. Load Model
+    # 1. Get the current directory of the app
+    current_dir = os.path.dirname(os.path.abspath(__file__))
+    
+    # 2. Define the exact paths to your files
+    # Note: We added '.json' because that is the name on your GitHub
+    model_path = os.path.join(current_dir, 'ctr_lgbm_model.joblib')
+    columns_path = os.path.join(current_dir, 'ctr_model_columns.json')
+
+    # 3. Load Model
     try:
-        model = joblib.load('ctr_lgbm_model.joblib')
+        model = joblib.load(model_path)
     except Exception as e:
         st.error(f"❌ Critical Error: Could not load model. Details: {e}")
         st.stop()
         
-    # 2. Load Columns (Smart Loader)
-    # We try loading as JSON first, then Joblib/Pickle because your file has no extension
+    # 4. Load Columns
     columns = []
     try:
-        with open('ctr_model_columns', 'r') as f:
+        with open(columns_path, 'r') as f:
             columns = json.load(f)
-    except:
-        try:
-            columns = joblib.load('ctr_model_columns')
-        except Exception as e:
-            st.error(f"❌ Critical Error: Could not load column names. Details: {e}")
-            st.stop()
+    except Exception as e:
+        st.error(f"❌ Critical Error: Could not load columns. Details: {e}")
+        st.stop()
             
-    # Handle case where columns might be a dict (e.g. {'data_columns': [...]})
+    # Handle case where columns might be a dict
     if isinstance(columns, dict):
         if "data_columns" in columns:
             columns = columns["data_columns"]
@@ -38,7 +42,6 @@ def load_assets():
             columns = list(columns.keys())
             
     return model, columns
-
 # Load them now
 model, model_columns = load_assets()
 
