@@ -7,6 +7,8 @@ This project develops a high-performance machine learning model to predict the *
 
 This project tackles this challenge by building and evaluating a sophisticated classification model on a large-scale, real-world dataset. The final model serves as a powerful tool for optimizing ad placements and understanding the key drivers of user engagement.
 
+Basic Live Demo: https://ctr-prediction-project-ykm24ryy8xktlbrgkhu5bz.streamlit.app/
+
 ### Key Features
 
   * Handles a large-scale dataset by employing a practical sampling strategy.
